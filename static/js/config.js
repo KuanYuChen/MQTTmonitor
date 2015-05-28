@@ -1,0 +1,11 @@
+// host = '172.16.153.122'; // hostname or IP address
+host = 'dev.wtec.cl'; // hostname or IP address
+// host = '172.16.153.110'; // hostname or IP address
+port = 8000;
+topic = 'RESP/#';        // topic to subscribe to
+useTLS = false;
+username = null;
+password = null;
+// username = "jjolie";
+// password = "aa";
+cleansession = true;

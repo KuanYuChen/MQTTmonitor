@@ -1,0 +1,29 @@
+#!/bin/bash
+
+NAME="APP monitor WTEC"
+FLASKDIR=/root/scripts/MQTT/websocket
+VENVDIR=/root/scripts/MQTT/websocket
+SOCKFILE=/root/scripts/MQTT/websocket/sock
+USER=wtec
+GROUP=wtec
+NUM_WORKERS=3
+
+echo "iniciando $NAME"
+
+# activate the virtualenv
+#cd $VENVDIR
+#source bin/activate
+
+export PYTHONPATH=$FLASKDIR:$PYTHONPATH
+
+# Create the run directory if it doesn't exist
+RUNDIR=$(dirname $SOCKFILE)
+test -d $RUNDIR || mkdir -p $RUNDIR
+
+# Start your unicorn
+exec gunicorn app:app -b 0.0.0.0:5000  \
+  --t 120 \
+  --workers $NUM_WORKERS \
+  --user=$USER --group=$GROUP \
+  --log-level=debug \
+  
