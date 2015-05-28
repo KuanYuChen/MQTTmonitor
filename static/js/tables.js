@@ -10,16 +10,13 @@
                   "last":"Ultimo"
               }
           },          
-            "ajax": "../data/datos.json",
+            "ajax":"../data/datos.json",
             "columns": [
-                      { "data": "id" },
                       { "data": "nombre" },
-                      { "data": "serie" },
-                      { "data": "conexion" },
                       { "data": "actualizacion" },
-                      { "data": "horaserver" },
                       { "data": "tiempoPasado" }
             ],
+
 
     });
     setInterval( function () { 

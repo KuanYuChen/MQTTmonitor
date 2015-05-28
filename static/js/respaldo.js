@@ -128,3 +128,9 @@ var apellidos = $(this).find("td").eq(3).html();
         table.ajax.reload(null, false); 
     }, 10000 );
 });
+
+
+         control.config['MYSQL_DATABASE_USER'] = 'wtec_dev'
+        control.config['MYSQL_DATABASE_PASSWORD'] = 'wtec123'
+        control.config['MYSQL_DATABASE_DB'] = 'wtec_webapp'
+        control.config['MYSQL_DATABASE_HOST'] = 'app.wtec.cl'
