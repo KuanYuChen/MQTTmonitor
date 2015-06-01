@@ -43,29 +43,65 @@
 
     };
 
+    function addLog(mensaje){
+        $('.console-out').append(mensaje);
+        var h = parseInt($('#log')[0].scrollHeight);
+        $('#log').scrollTop(h);
+
+    };
+
+
     function onMessageArrived(message) {
 
         var topic = message.destinationName;
         var payload = message.payloadString;
-
-        $('.console-out').append(" " +topic + ' Valor:' + payload +'\n');
-        var h = parseInt($('#log')[0].scrollHeight);
-        $('#log').scrollTop(h);
+        mensaje = "Resp:>" + topic + ' Valor: ' + payload + '\n';
+        addLog(mensaje);
+       
     };
 
-    function messageSend(comando){
+    function messageSend(comando, idTst){
         message = new Paho.MQTT.Message(comando);
-        message.destinationName = "CONF/12";
+        message.destinationName = "CONF/"+idTst;
         mqtt.send(message);
-        console.log(comando)
+        mensaje = "Env:>" + comando + '\n';
+        addLog(mensaje);
+        console.log(comando);
     };
 
+
+    function cursorAnimation() {
+    $('#cursor').animate({
+            opacity: 0
+        }, 'fast', 'swing').animate({
+            opacity: 1
+        }, 'fast', 'swing');
+    };
+
+   
 
     $(document).ready(function() {
+        setInterval ('cursorAnimation()', 900);
         MQTTconnect();
+         
+
          $("#enviarcomando").click(function(){
-            var comando = $("#comando").val() 
-            messageSend(comando);
+            if ( $.trim($("#comando").val()) != '' &&  $.trim($("#idTst").val()) != '' ) 
+            {
+                var comando = $("#comando").val().toUpperCase(); 
+                var idTst = $("#idTst").val().toUpperCase();
+                messageSend(comando,idTst);
+            }
+            else if ($.trim($("#comando").val()) != '') {
+                    var comando = $("#comando").val().toUpperCase(); 
+                    var idTst = '#';
+                    messageSend(comando,idTst);
+            }
+            else 
+            {
+                mensaje = "ERROR comando invalido \n";
+                addLog(mensaje);
+            }         
         });
     });
 

@@ -1,27 +1,25 @@
 from flask import Flask, render_template, session, request, redirect, Response
 from flask import jsonify
-import json 
+
 
 from db import Accionwtec
 from datetime import timedelta, datetime
-
 import time
 
-from threading import Thread
 
 app = Flask(__name__)
 app.debug = True
 
-
-
+#_______TIEMPOS DE MINUTOS DE DESCONEXION________#
+NORMAL = 5
+ERROR = 10
+#_______FIN TIEMPOS___________________#
 
 
 #----------------RUTAS---------------#
 @app.route('/')
 @app.route('/monitor/')
 def  equipos():
-	#listado_equipos = Accionwtec.AccionWtec().listarEquipos()
-	#equipos = listado_equipos
 	return render_template ('tables.html')
 
 
@@ -37,17 +35,26 @@ def conf():
 	else:
 		return Response(content, mimetype='text/plain')
 
+
+@app.route('/consola/<int:idTst>')
 @app.route('/consola/')
-def consola():
-	return render_template ('forms.html')
+def consola(idTst = None):
+	if idTst != None:
+		Equipo = Accionwtec.AccionWtec().listarEquipo(idTst)
+	else:
+		Equipo = None
+	return render_template ('forms.html', tst = Equipo )
+
+
+
 
 @app.route('/data/datos.json')
 def  jsonEquipos():
 	json_resultado = []
 	listado_equipos = Accionwtec.AccionWtec().listarEquipos()
 	for equipo in listado_equipos:
-		d = {'id' : "<a href='monitor/{0}'>{1}</href>".format(str(equipo[0]), str(equipo[0])),
-			 'nombre' : equipo[1],
+		d = {'id' : equipo[0],
+			 'nombre' : "<a href='../consola/{0}'>{1}</href>".format(str(equipo[0]), str(encode(equipo[1]))),
 			 'serie' : equipo[2],
 			 'conexion' : str(equipo[3]),
 			 'actualizacion' : str(equipo[4]),
@@ -59,20 +66,22 @@ def  jsonEquipos():
 
 #--------------FIN RUTAS------------#
 
+
+#--------------FUNCIONES------------#
 def tiempoPasado(conexion, equipo):
 	hoy = datetime.now()
-	minutos = ((hoy - conexion).seconds)/60
-	if minutos > 5  and minutos < 20:
-		minutos = "<span class='label label-warning'>" + str(minutos)  + " Minutos</span>"
-	elif minutos >=20:
-		minutos = "<span class='label label-danger'>" + str(minutos)  + " Minutos</span>"
-	elif minutos <= 5: 
-		minutos = "<span class='label label-success'>" + str(minutos)  + " Minutos</span>"
+	minutos = ((hoy - conexion).seconds)//60
+	if minutos > NORMAL  and minutos < ERROR:
+		minutos = "<span class='label label-warning'>{0} Minutos</span>".format(str(minutos))
+	elif minutos >= ERROR:
+		minutos = "<span class='label label-danger'>{0} Minutos</span>".format(str(minutos))
+	elif minutos <= NORMAL: 
+		minutos = "<span class='label label-success'>{0} Minutos</span>".format(str(minutos))
 	return minutos
 
-def decode(text):
+def encode(text):
 	return text.encode('utf-8')
-	
+#--------------FIN FUNCIONES--------#	
 
 
 

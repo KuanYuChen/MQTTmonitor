@@ -7,7 +7,11 @@
 	  				<div class="col-md-6">
 	  					<div class="content-box-large">
 			  				<div class="panel-heading">
-					            <div class="panel-title">Consola de comandos</div>
+					            <div class="panel-title">Consola de comandos 
+					            {% if tst %}
+					            	{{tst[0][1]}}
+					            {% endif %}
+					            </div>
 					          
 					            <div class="panel-options">
 					              <a href="#" data-rel="collapse"><i class="glyphicon glyphicon-refresh"></i></a>
@@ -21,13 +25,14 @@
         										<button class="btn btn-default" id="enviarcomando" type="button">Ejecutar</button>
      										 </span>
      										 <input type="text" id ="comando" class="form-control" placeholder="comando tst">
+     										 <input type="hidden" id="idTst" value='{% if tst %}{{tst[0][0]}}{%endif %}'>
    										 </div><!-- /input-group -->
   									</div><!-- /.col-lg-6 -->
 
 
   								<div class="col-sm-12">
 								    	 <pre id="log">
-								     	 	<div class="console-out"></div>
+								     	 	<div class="console-out"></div><span id="cursor">_</span>
 								     	 </pre>
 								     
 								</div>
@@ -36,7 +41,8 @@
 									<span class="label label-default" id="estado">Conectando..</span>
 				     
 								</div>
-								 
+								
+
 			  				</div>
 			  			</div>
 	  				</div>

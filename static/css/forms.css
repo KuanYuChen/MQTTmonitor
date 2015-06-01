@@ -2,11 +2,17 @@ pre {
     
     margin:0px;
     padding:0px;
-    font-size:15px;
+    font-size:14px;
     color:#fff;
     background-color:#300a24;
     
     
+}
+
+
+input[type="button"]
+{
+  cursor: pointer;
 }
 
  
