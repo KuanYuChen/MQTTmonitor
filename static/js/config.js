@@ -1,11 +1,12 @@
-// host = '172.16.153.122'; // hostname or IP address
+//Configuracion MQTT.js para consoloa de administracion TST
 host = 'dev.wtec.cl'; // hostname or IP address
-// host = '172.16.153.110'; // hostname or IP address
 port = 8000;
-topic = 'RESP/#';        // topic to subscribe to
+topicRespuesta = 'RESP/#'; 
+topicEnvioComando = 'CONTROL/'
 useTLS = false;
 username = null;
 password = null;
-// username = "jjolie";
-// password = "aa";
+// username = "prueba";
+// password = "superpass";
 cleansession = true;
+

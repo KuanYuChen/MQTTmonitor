@@ -21,3 +21,5 @@ class DBcon():
         control.config['MYSQL_DATABASE_HOST'] = '192.168.227.1'
         mysql.init_app(control)
         return mysql
+
+    
