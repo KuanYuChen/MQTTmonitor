@@ -16,6 +16,8 @@
             },
             "columns": [
                       { "data": "nombre" },
+                      { "data": "version" },
+                      { "data": "dbm" },
                       { "data": "actualizacion" },
                       { "data": "tiempoPasado" }
             ],
@@ -30,10 +32,10 @@
 
     function handleAjaxError( xhr, textStatus, error ) {
     if ( textStatus === 'timeout' ) {
-        alert( 'El servidor esta tardando mucho en enviar los datos.' );
+       console.log( 'El servidor esta tardando en enviar los datos.' );
     }
     else {
-        alert( 'Un error a ocurrido en el servidor, reintente en un minuto.' );
+        console.log( 'Un error a ocurrido en el servidor' );
     }
     myDataTable.fnProcessingIndicator( false );
 }

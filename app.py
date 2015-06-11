@@ -56,9 +56,11 @@ def  jsonEquipos():
 		d = {'id' : equipo[0],
 			 'nombre' : "<a href='../consola/{0}'>{1}</href>".format(str(equipo[0]), str(encode(equipo[1]))),
 			 'serie' : equipo[2],
-			 'conexion' : str(equipo[3]),
-			 'actualizacion' : str(equipo[4]),
-			 'tiempoPasado' :  tiempoPasado( equipo[4], equipo[1]),
+			 'dbm' : equipo[3],
+			 'version' : equipo[4],
+			 'conexion' : str(equipo[5]),
+			 'actualizacion' : str(equipo[6]),
+			 'tiempoPasado' :  tiempoPasado( equipo[6], equipo[1]),
 			 'horaserver' : str(time.strftime("%Y:%m:%d %H:%M:%S")) }
 		json_resultado.append(d)
 	

@@ -9,7 +9,7 @@ class AccionWtec(DBconec.DBcon):
 
 	def listarEquipos(self):
 		con = self.conexion().connect().cursor()
-		con.execute(" select um.id as id, um.nombre as nombre, um.serie as serie, " \
+		con.execute(" select um.id as id, um.nombre as nombre, um.serie as serie, r.dbm as dbm, r.version,  " \
 			"r.conexion as conexion, r.actualizacion as actualizacion from registro r, um " \
 			"where um.serie = r.serie order by um.nombre asc ")
 		equipos = con.fetchall()
