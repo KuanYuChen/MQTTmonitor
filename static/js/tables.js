@@ -19,6 +19,7 @@
                       { "data": "version" },
                       { "data": "dbm" },
                       { "data": "actualizacion" },
+                      { "data" : "conexion"},
                       { "data": "tiempoPasado" }
             ],
 
