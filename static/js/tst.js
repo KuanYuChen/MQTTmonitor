@@ -121,19 +121,10 @@
         clearTimeout(timer);
     };
 
-   
 
-    $(document).ready(function() {
-        setInterval ('cursorAnimation()', 900);
-        MQTTconnect();
-         
-        $("#limpiar").click(function(){
-            $('.console-out').empty();
 
-        });
-
-         $("#enviarcomando").click(function(){
-            if ( $.trim($("#comando").val()) != '' &&  $.trim($("#idTst").val()) != '' ) 
+    function verifyAndSend(){
+        if ( $.trim($("#comando").val()) != '' &&  $.trim($("#idTst").val()) != '' ) 
             {
                 var comando = $("#comando").val().toUpperCase(); 
                 var idTst = $("#idTst").val().toUpperCase();
@@ -149,6 +140,40 @@
                 mensaje = "ERROR comando invalido \n";
                 addLog(mensaje);
             }         
+    };
+
+
+    $.fn.pressEnter = function(fn) {  
+        return this.each(function() {  
+        $(this).bind('enterPress', fn);
+        $(this).keyup(function(e){
+            if(e.keyCode == 13)
+                {
+                  $(this).trigger("enterPress");
+                }
+            })
+        });  
+    }; 
+
+   
+
+    $(document).ready(function() {
+        setInterval ('cursorAnimation()', 900);
+        MQTTconnect();
+         
+        $("#limpiar").click(function(){
+            $('.console-out').empty();
+
+        });
+
+        $("#comando").pressEnter(function(){  
+                verifyAndSend();
+                $("#comando").val('');
+        });
+
+
+        $("#enviarcomando").click(function(){
+                verifyAndSend();
         });
     });
 
