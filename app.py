@@ -1,5 +1,11 @@
-from flask import Flask, render_template, session, request, redirect, Response
+import os
+
+from flask import Flask, render_template, session, request, redirect, Response, url_for
 from flask import jsonify
+from functools import wraps
+
+
+
 
 
 from db import Accionwtec
@@ -8,6 +14,7 @@ import time
 
 
 app = Flask(__name__)
+app.secret_key = os.urandom(24)
 app.debug = True
 
 #_______TIEMPOS DE MINUTOS DE DESCONEXION________#
@@ -16,10 +23,49 @@ ERROR = 10
 #_______FIN TIEMPOS___________________#
 
 
+
+
+#-------Autentificacion-----#
+
+
+def requires_auth(f):
+	@wraps(f)
+	def decorated(*args, **kwargs):
+		if 'usuario' in session:
+			if session['usuario'] != None:
+				return f(*args, **kwargs)
+		return redirect(url_for("login"))
+	return decorated
+
+#------Fin autentificacion -----------#
+
+
 #----------------RUTAS---------------#
+
 @app.route('/')
+def login():
+	return render_template('login.html')
+
+@app.route('/login', methods = ['POST'])
+def verificar():
+	email=str(request.form.get('usuario'))
+	password=str(request.form.get('password'))
+	usuario = Accionwtec.AccionWtec().usuarios(email, password)
+	if len(usuario)==1:
+		session['usuario'] = usuario[0][0]
+		return redirect(url_for("equipos"))
+	else:
+		return redirect(url_for("login"))
+
+@app.route('/logout')
+def logout():
+	session['usuario'] = None
+	return redirect(url_for("login"))
+
+
 @app.route('/monitor/')
-def  equipos():
+@requires_auth
+def equipos():
 	return render_template ('tables.html')
 
 
@@ -38,14 +84,13 @@ def conf():
 
 @app.route('/consola/<int:idTst>')
 @app.route('/consola/')
+@requires_auth
 def consola(idTst = None):
 	if idTst != None:
 		Equipo = Accionwtec.AccionWtec().listarEquipo(idTst)
 	else:
 		Equipo = None
 	return render_template ('forms.html', tst = Equipo )
-
-
 
 
 @app.route('/data/datos.json')
@@ -72,6 +117,7 @@ def  jsonEquipos():
 #--------------FUNCIONES------------#
 def tiempoPasado(conexion, equipo):
 	hoy = datetime.now()
+	
 	minutos = ((hoy - conexion).seconds)//60
 	if minutos > NORMAL  and minutos < ERROR:
 		minutos = "<span class='label label-warning'>{0} Minutos</span>".format(str(minutos))
@@ -85,13 +131,9 @@ def encode(text):
 	return text.encode('utf-8')
 #--------------FIN FUNCIONES--------#	
 
-
-
 def main():
 	try:
-		
 		app.run(host="0.0.0.0")
-
 	except Exception, e:
 		print "Error:{0} ".format(str(e))
 

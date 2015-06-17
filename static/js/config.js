@@ -1,6 +1,6 @@
 //Configuracion MQTT.js para consoloa de administracion TST
 host = 'dev.wtec.cl'; // hostname or IP address
-port = 8000;
+port = 10001;
 topicRespuesta = 'RESP/#'; 
 topicEnvioComando = 'CONTROL/'
 useTLS = false;

@@ -24,3 +24,9 @@ class AccionWtec(DBconec.DBcon):
 		equipo = con.fetchall()
 		return equipo
 
+	def usuarios(self, email, password):
+		con = self.conexion().connect().cursor()
+		sql = "	select nombre from usuario where tipo = 2 and estado = 1 and email='{0}' and password=md5('{1}') ".format(email, password)
+		con.execute(sql)
+		usuario = con.fetchall()
+		return usuario

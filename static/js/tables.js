@@ -1,14 +1,21 @@
  $(document).ready(function() {
     var table = $('#equipos').DataTable( {
+            responsive: true,
             "iDisplayLength": 30,
             "language" : {
+              "info":           "Mostrando _START_ de _END_  para  _TOTAL_ puntos de monitoreo",
+              "lengthMenu": "Mostrar _MENU_ puntos de monitoreo por pagina",
               "search": "Busqueda:",
+              "loadingRecords": "Cargando...",
+              "processing":     "Procesando...",
               "paginate": {
                   "first": "Primer",
                   "previous": "Previo",
                   "next":"Siguiente",
                   "last":"Ultimo"
-              }
+              },
+
+
           },          
             "ajax":{
               "url" : "../data/datos.json",
@@ -33,7 +40,7 @@
 
     function handleAjaxError( xhr, textStatus, error ) {
     if ( textStatus === 'timeout' ) {
-       console.log( 'El servidor esta tardando en enviar los datos.' );
+       console.log( 'El servidor registra un timeout en enviar los datos.' );
     }
     else {
         console.log( 'Un error a ocurrido en el servidor' );
