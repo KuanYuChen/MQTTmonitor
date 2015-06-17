@@ -26,7 +26,7 @@
 	           <div class="col-md-5">
 	              <!-- Logo -->
 	              <div class="logo">
-	                 <h1><a href="index.html">WTEC</a></h1>
+	                 <h1><a href="..">WTEC</a></h1>
 	              </div>
 	           </div>
 	           <div class="col-md-5">
@@ -62,7 +62,8 @@
                           {% set navigation_bar = [
                                 ('../monitor', 'glyphicon glyphicon-home', 'Principal'),
                                 ('../monitor', 'glyphicon glyphicon-signal', 'Monitor'),
-                                ('../consola', 'glyphicon glyphicon-cloud-download', 'Consola')
+                                ('../consola', 'glyphicon glyphicon-cloud-download', 'Consola'),
+                                ('../logs', 'glyphicon glyphicon-cloud-download', 'Logs')
                             ] -%}
                           
                           {% set active_page = active_page|default('Monitor') -%}

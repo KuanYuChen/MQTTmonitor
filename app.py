@@ -44,6 +44,9 @@ def requires_auth(f):
 
 @app.route('/')
 def login():
+	if 'usuario' in session:
+		if session['usuario'] != None:
+			return redirect(url_for("equipos"))
 	return render_template('login.html')
 
 @app.route('/login', methods = ['POST'])
@@ -110,6 +113,12 @@ def  jsonEquipos():
 		json_resultado.append(d)
 	
 	return jsonify(data=json_resultado)
+
+
+@app.route('/logs')
+def logs():
+	listado_registro = Accionwtec.AccionWtec().registroConexiones()
+	return render_template ('registro.html', equipos = listado_registro)
 
 #--------------FIN RUTAS------------#
 

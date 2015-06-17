@@ -1,0 +1,37 @@
+{% extends 'cabecera.html'  %}
+{% set active_page = "Logs" %}
+{% block contenido %}
+<div class = "row">
+  			<div class="content-box-large">
+  				
+  				<div class="panel-body">
+  					<table cellpadding="0" cellspacing="0" border="0" class="table stripe row-border nowrap order hover compact"  id="log">
+						<thead>
+							<tr>
+								<th>Serie</th>
+								<th>Conexion</th>						
+							</tr>
+						</thead>
+						<tbody>
+
+						{% for equipo in equipos %}
+							<tr>
+								<td>{{equipo[0]}} </td>
+								<td>{{equipo[1]}} </td>
+							</tr>
+						{% endfor %}
+						<tbody>
+						<tfood>
+							<tr>
+								<th>Serie</th>
+								<th>Conexion</th>	
+							</tr>
+						</tfood>
+					</table>
+				</div>
+  			
+  			</div>
+</div>
+{% endblock %}
+
+   

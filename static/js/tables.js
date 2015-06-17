@@ -1,4 +1,5 @@
  $(document).ready(function() {
+
     var table = $('#equipos').DataTable( {
             responsive: true,
             "iDisplayLength": 30,
@@ -33,6 +34,9 @@
 
 
     });
+
+    $('#log').DataTable();
+
     setInterval( function () { 
         table.ajax.reload(null, false); 
     }, 10000 );

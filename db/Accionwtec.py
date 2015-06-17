@@ -30,3 +30,10 @@ class AccionWtec(DBconec.DBcon):
 		con.execute(sql)
 		usuario = con.fetchall()
 		return usuario
+
+	def registroConexiones(self):
+		con = self.conexion().connect().cursor()
+		sql = " select serie, fecha from registro_logs order by fecha desc"
+		con.execute(sql)
+		registro = con.fetchall()
+		return registro
