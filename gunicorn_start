@@ -6,7 +6,7 @@ VENVDIR=/root/scripts/MQTT/MQTTmonitor
 SOCKFILE=/root/scripts/MQTT/MQTTmonitor/sock
 USER=wtec
 GROUP=wtec
-NUM_WORKERS=3
+NUM_WORKERS=1
 
 echo "iniciando $NAME"
 
