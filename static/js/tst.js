@@ -125,20 +125,34 @@
     };
 
 
+    function info(mensaje){
+        $("#mensaje").append($("<div class='mensaje-info'> <h5>"+ mensaje +"</h5></div> "));
+        $("#mensaje").animate({ 'height':'toggle','opacity':'toggle'});
+        window.setTimeout( function(){
+                    $(".mensaje-info").remove();
+                    $("#mensaje").slideUp();
+        }, 3500);
+    };
+
+
+
     //MEJORAR funciones al vuelo
     function commandRefresh(idTst){
         comando = "REFRESH";
-        messageSend(comando,idTst);
+        messageSend(comando,idTst);      
+        info("Comando REFRESH enviado a TST "+idTst );
     };
 
     function commandClean(idTst){
         comando = "CLEAN";
         messageSend(comando,idTst);
+        info("Comando CLEAN enviado a TST "+idTst );
     };
 
     function commandReset(idTst){
         comando = "RESET";
         messageSend(comando,idTst);
+        info("Comando RESET enviado a TST "+idTst );
     };
     //FIN FUNCIONES
 
@@ -179,6 +193,7 @@
    
 
     $(document).ready(function() {
+        $('#mensaje').hide();
         setInterval ('cursorAnimation()', 900);
         MQTTconnect();
          
