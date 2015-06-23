@@ -1,6 +1,8 @@
 import os
+import paho.mqtt.publish as publish
+import time
 
-from flask import Flask, render_template, session, request, redirect, Response, url_for
+from flask import Flask, g, render_template, session, request, redirect, Response, url_for
 from flask import jsonify
 from functools import wraps
 
@@ -10,7 +12,7 @@ from functools import wraps
 
 from db import Accionwtec
 from datetime import timedelta, datetime
-import time
+
 
 
 app = Flask(__name__)
@@ -67,22 +69,11 @@ def logout():
 
 
 @app.route('/monitor/')
-@requires_auth
+#@requires_auth
 def equipos():
 	return render_template ('tables.html')
 
 
-@app.route('/comando',methods = ['GET','POST'])
-def conf():
-	if request.method == 'POST':
-			comando = request.data.split(",")
-			peticion = comando[0]
-			idCliente = comando[1]
-			print peticion, idCliente
-			client.publish("CONF/"+idCliente, peticion)
-			return "ok"
-	else:
-		return Response(content, mimetype='text/plain')
 
 
 @app.route('/consola/<int:idTst>')
@@ -95,6 +86,7 @@ def consola(idTst = None):
 		Equipo = None
 	return render_template ('forms.html', tst = Equipo )
 
+		
 
 @app.route('/data/datos.json')
 def  jsonEquipos():
@@ -102,7 +94,8 @@ def  jsonEquipos():
 	listado_equipos = Accionwtec.AccionWtec().listarEquipos()
 	for equipo in listado_equipos:
 		d = {'id' : equipo[0],
-			 'nombre' : "<a href='../consola/{0}'>{1}</href>".format(str(equipo[0]), str(encode(equipo[1]))),
+			 'nombre' : str(encode(equipo[1])),
+			 'acciones' : str(menu(encode(equipo[1]), equipo[0])),
 			 'serie' : equipo[2],
 			 'dbm' : equipo[3],
 			 'version' : equipo[4],
@@ -114,16 +107,42 @@ def  jsonEquipos():
 	
 	return jsonify(data=json_resultado)
 
+def menu(equipo, id):
+	opciones = 	"<div class='btn-group btn-group-xs' role='group' >" \
+				"<button class='btn btn-info btn-xs'><a href='../consola/{0}'> <i class='glyphicon glyphicon-wrench'></i></a></button>" \
+				"<button class='btn btn-info btn-xs'><a href='#' onClick='commandRefresh({0});'>  <i class='glyphicon glyphicon-refresh'></i> </a></button>" \
+				"<button class='btn btn-info btn-xs'><a href='#' onClick='commandClean({0});'>  <i class='glyphicon glyphicon-floppy-remove'></i> </a></button>" \
+				"<button class='btn btn-success btn-xs'> <a href='#' onClick='commandReset({0});'>" \
+				" <i class='glyphicon glyphicon-off'></i> </a> </button> </div>".format(id)
+	return opciones
 
-@app.route('/logs')
-def logs():
-	listado_registro = Accionwtec.AccionWtec().registroConexiones()
+
+
+@app.route('/logs/<int:idTst>')
+@app.route('/logs/')
+def logs(idTst = None):
+	if idTst is None:
+		listado_registro = Accionwtec.AccionWtec().registroConexiones()
+	else:
+		Accionwtec.AccionWtec().eliminarRegistroLog(idTst)
+		return redirect(url_for("logs"))
+
 	return render_template ('registro.html', equipos = listado_registro)
 
 #--------------FIN RUTAS------------#
 
 
 #--------------FUNCIONES------------#
+#Funciones MQTT
+def mqttEnvio(topic = None, mensaje = None ,  idTst = None):
+	topic = topic  + idTst
+	publish.single(topic, mensaje,qos=1,hostname="dev.wtec.cl")
+#Fin funciones MQTT
+
+
+
+
+
 def tiempoPasado(conexion, equipo):
 	hoy = datetime.now()
 	

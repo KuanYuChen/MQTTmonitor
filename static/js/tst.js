@@ -92,10 +92,13 @@
         else
             message.destinationName = topicEnvioComando+idTst;
         mqtt.send(message);
-        mensaje = "Env:>" + comando + '\n';
-        addLog(mensaje);
         console.log(comando);
-        startTimer();
+        if (comando != 'REFRESH' && comando != 'CLEAN' && comando != 'RESET' ){
+            mensaje = "Env:>" + comando + '\n';
+            addLog(mensaje);
+            console.log(comando);
+            startTimer();
+        }
     };
 
 
@@ -122,6 +125,22 @@
     };
 
 
+    //MEJORAR funciones al vuelo
+    function commandRefresh(idTst){
+        comando = "REFRESH";
+        messageSend(comando,idTst);
+    };
+
+    function commandClean(idTst){
+        comando = "CLEAN";
+        messageSend(comando,idTst);
+    };
+
+    function commandReset(idTst){
+        comando = "RESET";
+        messageSend(comando,idTst);
+    };
+    //FIN FUNCIONES
 
     function verifyAndSend(){
         if ( $.trim($("#comando").val()) != '' &&  $.trim($("#idTst").val()) != '' ) 
@@ -155,6 +174,8 @@
         });  
     }; 
 
+
+
    
 
     $(document).ready(function() {
@@ -175,6 +196,8 @@
         $("#enviarcomando").click(function(){
                 verifyAndSend();
         });
+
+
     });
 
     

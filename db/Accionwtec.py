@@ -33,7 +33,16 @@ class AccionWtec(DBconec.DBcon):
 
 	def registroConexiones(self):
 		con = self.conexion().connect().cursor()
-		sql = " select serie, fecha from registro_logs order by fecha desc"
+		sql = " select id, serie, fecha from registro_logs order by fecha asc"
 		con.execute(sql)
 		registro = con.fetchall()
 		return registro
+
+	def eliminarRegistroLog(self, idTst):
+		con = self.conexion().connect().cursor()
+		sql = " delete from registro_logs where id=%d ; commit;" % (idTst)
+		con.execute(sql)
+		
+
+		
+		

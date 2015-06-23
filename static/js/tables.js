@@ -24,10 +24,11 @@
             },
             "columns": [
                       { "data": "nombre" },
+                      { "data": "acciones"},
                       { "data": "version" },
                       { "data": "dbm" },
                       { "data": "actualizacion" },
-                      { "data" : "conexion"},
+                      { "data": "conexion"},
                       { "data": "tiempoPasado" }
             ],
 
@@ -35,7 +36,22 @@
 
     });
 
-    $('#log').DataTable();
+    $('#logConexion').dataTable({
+           "language" : {
+              "info":           "Mostrando _START_ de _END_  para  _TOTAL_ registro de logs",
+              "lengthMenu": "Mostrar _MENU_ registro de logs",
+              "search": "Busqueda:",
+              "loadingRecords": "Cargando...",
+              "processing":     "Procesando...",
+              "paginate": {
+                  "first": "Primer",
+                  "previous": "Previo",
+                  "next":"Siguiente",
+                  "last":"Ultimo"
+              },
+
+          }    
+        });
 
     setInterval( function () { 
         table.ajax.reload(null, false); 

@@ -5,26 +5,37 @@
   			<div class="content-box-large">
   				
   				<div class="panel-body">
-  					<table cellpadding="0" cellspacing="0" border="0" class="table stripe row-border nowrap order hover compact"  id="log">
+  					<table cellpadding="0" cellspacing="0" border="0" class="table stripe row-border nowrap order hover compact"  id="logConexion">
 						<thead>
 							<tr>
 								<th>Serie</th>
-								<th>Conexion</th>						
+								<th>Fecha</th>
+								<th>Acciones</th>						
 							</tr>
 						</thead>
 						<tbody>
 
 						{% for equipo in equipos %}
 							<tr>
-								<td>{{equipo[0]}} </td>
+							
 								<td>{{equipo[1]}} </td>
+								<td>{{equipo[2]}} </td>
+									<td	>
+
+
+ 
+    
+                      <button class="btn btn-info btn-xs"><a href='../logs/{{equipo[0]}}'><i class="glyphicon glyphicon-remove"></i></a> </button>
+
+								</td>
 							</tr>
 						{% endfor %}
 						<tbody>
 						<tfood>
 							<tr>
 								<th>Serie</th>
-								<th>Conexion</th>	
+								<th>Fecha</th>
+								<th>Acciones</th>	
 							</tr>
 						</tfood>
 					</table>
