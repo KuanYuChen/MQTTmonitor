@@ -140,20 +140,26 @@ def mqttEnvio(topic = None, mensaje = None ,  idTst = None):
 #Fin funciones MQTT
 
 
+def days_hours_minutes(td):
+	return td.days, td.seconds//3600, (td.seconds//60)%60
 
 
 
 def tiempoPasado(conexion, equipo):
 	hoy = datetime.now()
-	
-	minutos = ((hoy - conexion).seconds)//60
-	if minutos > NORMAL  and minutos < ERROR:
-		minutos = "<span class='label label-warning'>{0} Minutos</span>".format(str(minutos))
-	elif minutos >= ERROR:
-		minutos = "<span class='label label-danger'>{0} Minutos</span>".format(str(minutos))
-	elif minutos <= NORMAL: 
-		minutos = "<span class='label label-success'>{0} Minutos</span>".format(str(minutos))
-	return minutos
+	dias, horas, minutos = days_hours_minutes (hoy - conexion)
+	if dias > 0 and horas > 0:
+		tiempo = "<span class='label label-danger'>{0} dias con {1} horas y {2} Minutos </span>".format(dias, horas, minutos)
+	elif horas > 0:
+		tiempo = "<span class='label label-danger'>{0} horas con {1} Minutos</span>".format(horas ,minutos)
+	else:
+		if minutos > NORMAL  and minutos < ERROR:
+			tiempo = "<span class='label label-warning'>{0} Minutos</span>".format(str(minutos))
+		elif minutos >= ERROR:
+			tiempo = "<span class='label label-danger'>{0} Minutos</span>".format(str(minutos))
+		elif minutos <= NORMAL: 
+			tiempo = "<span class='label label-success'>{0} Minutos</span>".format(str(minutos))
+	return tiempo
 
 def encode(text):
 	return text.encode('utf-8')
