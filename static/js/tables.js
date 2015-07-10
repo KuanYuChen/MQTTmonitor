@@ -23,13 +23,13 @@
               "error" : handleAjaxError 
             },
             "columns": [
+                      { "data": "tiempoPasado" },
                       { "data": "nombre" },
                       { "data": "acciones"},
                       { "data": "version" },
                       { "data": "dbm" },
                       { "data": "actualizacion" },
                       { "data": "conexion"},
-                      { "data": "tiempoPasado" }
             ],
 
 

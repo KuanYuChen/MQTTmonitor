@@ -20,8 +20,8 @@ app.secret_key = os.urandom(24)
 app.debug = True
 
 #_______TIEMPOS DE MINUTOS DE DESCONEXION________#
-NORMAL = 5
-ERROR = 10
+NORMAL = 6 
+ERROR = 12
 #_______FIN TIEMPOS___________________#
 
 
@@ -69,7 +69,7 @@ def logout():
 
 
 @app.route('/monitor/')
-#@requires_auth
+@requires_auth
 def equipos():
 	return render_template ('tables.html')
 
@@ -93,9 +93,14 @@ def  jsonEquipos():
 	json_resultado = []
 	listado_equipos = Accionwtec.AccionWtec().listarEquipos()
 	for equipo in listado_equipos:
+		acciones = "sin MQTT"
+			
+		if equipo[7] == 1:
+			acciones = str(menu(encode(equipo[1]), equipo[0]))
+		
 		d = {'id' : equipo[0],
-			 'nombre' : str(encode(equipo[1])),
-			 'acciones' : str(menu(encode(equipo[1]), equipo[0])),
+			 'nombre' : str(encode(equipo[1])+' ('+str(equipo[0])+')'),
+			 'acciones' : acciones,
 			 'serie' : equipo[2],
 			 'dbm' : equipo[3],
 			 'version' : equipo[4],
@@ -140,18 +145,18 @@ def mqttEnvio(topic = None, mensaje = None ,  idTst = None):
 #Fin funciones MQTT
 
 
-def days_hours_minutes(td):
+def dias_horas_minutos(td):
 	return td.days, td.seconds//3600, (td.seconds//60)%60
 
 
 
 def tiempoPasado(conexion, equipo):
 	hoy = datetime.now()
-	dias, horas, minutos = days_hours_minutes (hoy - conexion)
-	if dias > 0 and horas > 0:
-		tiempo = "<span class='label label-danger'>{0} dias con {1} horas y {2} Minutos </span>".format(dias, horas, minutos)
+	dias, horas, minutos = dias_horas_minutos (hoy - conexion)
+	if dias > 0:
+		tiempo = "<span class='label label-danger'>{0} [d], {1} [h], {2} [m]</span>".format(dias, horas, minutos)
 	elif horas > 0:
-		tiempo = "<span class='label label-danger'>{0} horas con {1} Minutos</span>".format(horas ,minutos)
+		tiempo = "<span class='label label-danger'>{0} [h], {1} [m]</span>".format(horas ,minutos)
 	else:
 		if minutos > NORMAL  and minutos < ERROR:
 			tiempo = "<span class='label label-warning'>{0} Minutos</span>".format(str(minutos))
@@ -160,6 +165,14 @@ def tiempoPasado(conexion, equipo):
 		elif minutos <= NORMAL: 
 			tiempo = "<span class='label label-success'>{0} Minutos</span>".format(str(minutos))
 	return tiempo
+
+
+
+
+
+
+
+
 
 def encode(text):
 	return text.encode('utf-8')
