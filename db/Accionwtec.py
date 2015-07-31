@@ -7,11 +7,13 @@ class AccionWtec(DBconec.DBcon):
 		pass
 
 
-	def listarEquipos(self):
+	def listarEquipos(self, estado):
 		con = self.conexion().connect().cursor()
-		con.execute(" select um.id as id, um.nombre as nombre, um.serie as serie, r.dbm as dbm, r.version,  " \
-			"r.conexion as conexion, r.actualizacion as actualizacion, mqtt from registro r, um " \
-			"where um.serie = r.serie and um.estado = 1 order by um.nombre asc ")
+		SQL = "select um.id as id, um.nombre as nombre, um.serie as serie, r.dbm as dbm, r.version, "\
+			"r.conexion as conexion, r.actualizacion as actualizacion, mqtt from um inner join registro r on " \
+			"um.serie = r.serie inner join proyecto p on um.id_proyecto = p.id where operativo = {0} " \
+			"order by um.nombre asc".format(str(estado))
+		con.execute(SQL)
 		equipos = con.fetchall()
 		return equipos 
 

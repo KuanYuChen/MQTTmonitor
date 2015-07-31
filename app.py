@@ -4,6 +4,7 @@ import time
 
 from flask import Flask, g, render_template, session, request, redirect, Response, url_for
 from flask import jsonify
+
 from functools import wraps
 
 
@@ -69,11 +70,13 @@ def logout():
 
 
 @app.route('/monitor/')
+@app.route('/desconectados/')
 @requires_auth
 def equipos():
-	return render_template ('tables.html')
-
-
+	if request.path == '/monitor/':
+		return render_template ('tables.html', estado = 1, activa="Monitor")
+	elif request.path == '/desconectados/':
+		return render_template ('tables.html', estado = 0, activa="Desconectados")
 
 
 @app.route('/consola/<int:idTst>')
@@ -88,14 +91,19 @@ def consola(idTst = None):
 
 		
 
-@app.route('/data/datos.json')
-def  jsonEquipos():
+@app.route('/data/datos/<int:estado>')
+def  jsonEquipos(estado = 1):
 	json_resultado = []
-	listado_equipos = Accionwtec.AccionWtec().listarEquipos()
+
+	if estado == 0: #desahabilitados
+		listado_equipos = Accionwtec.AccionWtec().listarEquipos(0)
+	else: #se muestran solo los habilitados
+		listado_equipos = Accionwtec.AccionWtec().listarEquipos(1)
+	
 	for equipo in listado_equipos:
 		acciones = "sin MQTT"
 			
-		if equipo[7] == 1:
+		if equipo[7] == 1: #Tiene MQTT habilitado
 			acciones = str(menu(encode(equipo[1]), equipo[0]))
 		
 		d = {'id' : equipo[0],

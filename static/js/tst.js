@@ -20,7 +20,7 @@
                         "web_" + parseInt(Math.random() * 100,
                         10));
         var options = {
-            timeout: 3,
+            timeout: 30,
             mqttVersion : version,
             useSSL: useTLS,
             cleanSession: cleansession,
@@ -78,10 +78,18 @@
 
     function onMessageArrived(message) {
 
+        var idTst = $("#idTst").val().toUpperCase();
         var topicRespuesta = message.destinationName;
         var payload = message.payloadString;
         mensaje = "Resp:>" + topicRespuesta + ' Valor: ' + payload + '\n';
-        addLog(mensaje);
+
+        if (idTst == "") 
+            addLog(mensaje);
+        else{
+            var res = topicRespuesta.split("/");
+            if (res[1] == idTst)
+                addLog(mensaje);
+        }
         stopTimer();
     };
 

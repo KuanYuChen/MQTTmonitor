@@ -1,7 +1,11 @@
  $(document).ready(function() {
 
+    var estado = $('input#listar').val();
+  
+
     var table = $('#equipos').DataTable( {
             responsive: true,
+             "order": [[ 1, "asc" ]],
             "iDisplayLength": 30,
             "language" : {
               "info":           "Mostrando _START_ de _END_  para  _TOTAL_ puntos de monitoreo",
@@ -19,7 +23,7 @@
 
           },          
             "ajax":{
-              "url" : "../data/datos.json",
+              "url" : "../data/datos/"+estado,
               "error" : handleAjaxError 
             },
             "columns": [
